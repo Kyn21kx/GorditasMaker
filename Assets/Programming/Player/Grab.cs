@@ -8,8 +8,11 @@ public class Grab : MonoBehaviour
 
     #endregion
 
-    private void GrabObject () {
+    private void Update() {
         
     }
 
+    private void GrabObject () {
+        
+    }
 }
