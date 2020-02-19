@@ -38,7 +38,7 @@ public class Grab : MonoBehaviour
         if (grabbed) {
             obj.GetComponent<Rigidbody>().useGravity = false;
             obj.position = Vector3.Lerp(obj.position, cam.transform.position + cam.transform.forward * disToObj, Time.deltaTime * movingSpeed);
-            disToObj = Mathf.Clamp(disToObj, 0.2f, grabbingDistance);
+            disToObj = Mathf.Clamp(disToObj, 0.5f, grabbingDistance);
             if (Input.mouseScrollDelta.y > 0) {
                 disToObj++;
             }
