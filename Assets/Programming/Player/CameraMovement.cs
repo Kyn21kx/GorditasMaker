@@ -7,7 +7,7 @@ public class CameraMovement : MonoBehaviour
     #region Variables 
     public float mouseSensitivity;
     private float auxSensitivity;
-    private Vector2 camInput;
+    public Vector2 camInput;
     private Transform player;
     #endregion
 
@@ -22,9 +22,9 @@ public class CameraMovement : MonoBehaviour
     }
 
     private void LookAround () {
-        camInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y")).normalized;
-        transform.Rotate(-camInput.y * mouseSensitivity * Time.deltaTime, 0f, 0f);
+        camInput = new Vector2(Input.GetAxis("Mouse X"), -Input.GetAxis("Mouse Y"));
         player.Rotate(0f, camInput.x * mouseSensitivity * Time.deltaTime, 0f);
+        transform.localRotation = Quaternion.AngleAxis(transform.rotation.eulerAngles.x + camInput.y * mouseSensitivity * Time.deltaTime, Vector3.right);
     }
 
 }
