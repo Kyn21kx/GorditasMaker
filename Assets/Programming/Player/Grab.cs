@@ -51,13 +51,12 @@ public class Grab : MonoBehaviour
                 rg.useGravity = true;
                 rg.velocity += 5f * new Vector3(cam.GetComponent<CameraMovement>().camInput.x, cam.GetComponent<CameraMovement>().camInput.y, rg.velocity.z);
             }
-            Debug.Log(Input.GetAxis("Horizontal"));
             Vector2 inputRot = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             if (inputRot.x != 0f) {
-                obj.Rotate(inputRot.x * Time.deltaTime * 200f, 0f, 0f);
+                obj.Rotate(inputRot.x * Time.deltaTime * 300f, 0f, 0f);
             }
             if (inputRot.y != 0f) {
-                obj.Rotate(0f, -inputRot.y * Time.deltaTime * 200f, 0f);
+                obj.Rotate(0f, -inputRot.y * Time.deltaTime * 300f, 0f);
             }
         }
         Debug.DrawRay(cam.transform.position, cam.transform.forward * grabbingDistance);
