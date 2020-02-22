@@ -68,7 +68,7 @@ public class Grab : MonoBehaviour
     private void OnCollisionStay(Collision collision) {
         if (grabbed) {
 
-
+         
         }
     }
 
