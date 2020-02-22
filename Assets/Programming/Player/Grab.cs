@@ -21,33 +21,36 @@ public class Grab : MonoBehaviour
         GrabObject();
     }
     float disToObj = 0f;
+    Rigidbody rg = null;
     private void GrabObject () {
         RaycastHit hit;
-        Vector3 prevPos = Vector3.zero;
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, grabbingDistance)) {
             if (hit.transform != null && hit.transform.CompareTag("Pickup")) {
                 if (Input.GetMouseButtonDown(1)) {
                     disToObj = Vector3.Distance(hit.transform.position, cam.transform.position);
-                    prevPos = hit.transform.position;
                     obj = hit.transform;
+                    rg = obj.GetComponent<Rigidbody>();
+                    rg.angularVelocity *= Vector2.zero;
                     grabbed = true;
                 }
                 
             }
         }
         if (grabbed) {
-            obj.GetComponent<Rigidbody>().useGravity = false;
-            obj.position = Vector3.Lerp(obj.position, cam.transform.position + cam.transform.forward * disToObj, Time.deltaTime * movingSpeed);
+            rg.useGravity = false;
+            rg.isKinematic = false;
+            rg.angularVelocity = Vector3.Cross(rg.angularVelocity, Vector3.zero);
+            //Idea del orbe gravitatorio que tiene como child al objeto
+            rg.MovePosition(Vector3.Lerp(obj.position, cam.transform.position + cam.transform.forward * disToObj, Time.deltaTime * movingSpeed));
             disToObj = Mathf.Clamp(disToObj, 1f, grabbingDistance);
             if (Input.mouseScrollDelta.y > 0) {
-                disToObj++;
+                disToObj+= 0.5f;
             }
             else if (Input.mouseScrollDelta.y < 0) {
-                disToObj--;
+                disToObj -= 0.5f;
             }
             if (Input.GetMouseButtonUp(1)) {
                 grabbed = false;
-                var rg = obj.GetComponent<Rigidbody>();
                 rg.useGravity = true;
                 rg.velocity += 5f * new Vector3(cam.GetComponent<CameraMovement>().camInput.x, cam.GetComponent<CameraMovement>().camInput.y, rg.velocity.z);
             }
@@ -61,4 +64,11 @@ public class Grab : MonoBehaviour
         }
         Debug.DrawRay(cam.transform.position, cam.transform.forward * grabbingDistance);
     }
+
+    private void OnCollisionStay(Collision collision) {
+        if (grabbed) {
+
+        }
+    }
+
 }
