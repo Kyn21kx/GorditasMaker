@@ -1018,6 +1018,7 @@ GameObject:
   - component: {fileID: 1273521831}
   - component: {fileID: 1273521832}
   - component: {fileID: 1273521833}
+  - component: {fileID: 1273521837}
   m_Layer: 0
   m_Name: car-base
   m_TagString: Untagged
@@ -1167,6 +1168,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -90, y: -90, z: 0}
+--- !u!65 &1273521837
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1273521827}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.008, y: 0.059747234, z: 0.002}
+  m_Center: {x: 0.006, y: 0, z: 0.0291}
 --- !u!1001 &1316855165
 PrefabInstance:
   m_ObjectHideFlags: 0
