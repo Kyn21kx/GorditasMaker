@@ -2,45 +2,55 @@
 using TMPro;
 using System.Collections.Generic;
 
-public class OrderManager : MonoBehaviour
-{
+public class OrderManager : MonoBehaviour {
     //Set up orders by a minimum number of ingredients, core ingredients, and types of food
-    public enum Ingredients {Frijoles, Chicharron, Queso, Papas, Crema, Guacamole, Salsa};
+    public enum Ingredients { Frijoles, Chicharron, Queso, Papas, Crema, Guacamole, Salsa };
     //public enum FoodType {Gordita, Taco};
     #region Variables
     public int numberOfIngredientes;
+    private int numberOfProducts;
+    public int maxNumberOfProducts;
     [SerializeField]
     List<int> repeatedValues = new List<int>();
-    public List<Ingredients[]> orders = new List<Ingredients[]>();
+    public List<Ingredients[]> products = new List<Ingredients[]>();
+    public List<List<Ingredients[]>> orders = new List<List<Ingredients[]>>();
     public TextMeshProUGUI orderText;
+    private System.Random ing;
     #endregion
 
     private void Update() {
         if (Input.GetKeyDown(KeyCode.E)) {
-            GenerateOrder();
+            numberOfProducts = new System.Random().Next(1, maxNumberOfProducts);
+            for (int i = 0; i < numberOfProducts; i++) {
+                GenerateOrder();
+            }
         }
     }
 
-    private void GenerateOrder () {
-        orders.Add(GenerateGordita());
+    private void GenerateOrder() {
+        orders.Add(GenerateProduct());
+    }
+
+    private List<Ingredients[]> GenerateProduct () {
+        products.Add(GenerateGordita());
         orderText.SetText("");
-        for (int j = 0; j < orders.Count; j++) {
-            var item = orders[j];
-            orderText.text +="\nOrden #" + (j + 1) + ". Deme una gordita con: ";
-            for (int i = 0; i < item.Length; i++) {
-                orderText.text += (item.GetValue(i) + " ");
+        for (int i = 0; i < products.Count; i++) {
+            orderText.text += "\nProducto: ";
+            var item = products[i];
+            for (int j = 0; j < item.Length; j++) {
+                orderText.text += item.GetValue(j) + " ";
             }
         }
+        return products;
     }
 
     private Ingredients[] GenerateGordita () {
         //Return the array of the ingredients selected
         System.Random ingNum = new System.Random();
-        System.Random ing = new System.Random();
-        numberOfIngredientes = ingNum.Next(1, System.Enum.GetNames(typeof(Ingredients)).Length);
+        ing = new System.Random();
         var values = System.Enum.GetValues(typeof(Ingredients));
         Ingredients[] ingredients;
-        ingredients = new Ingredients[numberOfIngredientes];
+        ingredients = new Ingredients[ingNum.Next(1, System.Enum.GetNames(typeof(Ingredients)).Length)];
         repeatedValues.Clear();
         for (int i = 0; i < ingredients.Length; i++) {
             int init = ing.Next(ingredients.Length);
