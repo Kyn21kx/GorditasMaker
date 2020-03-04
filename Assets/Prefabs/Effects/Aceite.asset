@@ -16,7 +16,7 @@ MonoBehaviour:
   m_simpleMaxParticles: 30000
   m_simpleSubstepCount: 2
   m_simpleIterationCount: 5
-  m_simpleGravity: {x: 0, y: -9.81, z: 0}
+  m_simpleGravity: {x: 0, y: -7, z: 0}
   m_simpleParticleSize: 0.05
   m_simpleParticleFriction: 0.34
   m_simpleParticleRestitution: 0
@@ -25,8 +25,8 @@ MonoBehaviour:
   m_simpleClothWind: {x: 0, y: 0, z: 0}
   m_simpleClothDrag: 0
   m_simpleClothLift: 0
-  m_simpleFluidCohesion: 0.02
-  m_simpleFluidTension: 1
+  m_simpleFluidCohesion: 0.002
+  m_simpleFluidTension: 50
   m_simpleFluidViscosity: 0
   m_simpleFluidVorticity: 0
   m_simpleFluidAnisotropy: 2
@@ -39,7 +39,7 @@ MonoBehaviour:
   m_recreateSolver: 0
   m_substepCount: 2
   m_iterationCount: 5
-  m_gravity: {x: 0, y: -9.81, z: 0}
+  m_gravity: {x: 0, y: -7, z: 0}
   m_radius: 0.075
   m_solidRest: 0.05
   m_fluidRest: 0.0475
@@ -58,8 +58,8 @@ MonoBehaviour:
   m_drag: 0
   m_lift: 0
   m_fluid: 1
-  m_cohesion: 0.02
-  m_surfaceTension: 1
+  m_cohesion: 0.002
+  m_surfaceTension: 50
   m_viscosity: 0
   m_vorticityConfinement: 0
   m_anisotropyScale: 2
