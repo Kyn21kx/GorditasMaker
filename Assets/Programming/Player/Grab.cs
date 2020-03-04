@@ -10,6 +10,8 @@ public class Grab : MonoBehaviour
     public float movingSpeed;
     public bool grabbed;
     Transform obj;
+    float disToObj = 0f;
+    Rigidbody rg = null;
     #endregion
 
     private void Start() {
@@ -20,9 +22,9 @@ public class Grab : MonoBehaviour
     private void Update() {
         GrabObject();
     }
-    float disToObj = 0f;
-    Rigidbody rg = null;
+    
     private void GrabObject () {
+        //Change Raycast to raycast all
         RaycastHit hit;
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, grabbingDistance)) {
             if (hit.transform != null && hit.transform.CompareTag("Pickup")) {
