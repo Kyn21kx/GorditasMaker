@@ -17,7 +17,7 @@ public class OrderManager : MonoBehaviour {
     public TextMeshProUGUI orderText;
     private System.Random ing;
     [SerializeField]
-    private int orderIndex = 0;
+    private int orderIndex = -1;
     #endregion
     /*
      * TO DO SUPER IMPORTAAAAAAAAAAANT
@@ -26,6 +26,7 @@ public class OrderManager : MonoBehaviour {
     private void Update() {
         //Replace input event for when a customer walks in to ask for an order
         if (Input.GetKeyDown(KeyCode.E)) {
+            
             StartCoroutine(GenerateOrder());
         }
         if (Input.GetKeyDown(KeyCode.Space)) {
@@ -34,6 +35,7 @@ public class OrderManager : MonoBehaviour {
     }
 
     private IEnumerator GenerateOrder() {
+        orderIndex++;
         numberOfProducts = new System.Random().Next(1, maxNumberOfProducts);
         List<Ingredients[]> products = new List<Ingredients[]>();
         for (int i = 0; i < numberOfProducts; i++) {
@@ -48,6 +50,7 @@ public class OrderManager : MonoBehaviour {
     }
 
     private Ingredients[] GenerateGordita() {
+
         //Return the array of the ingredients selected
         System.Random ingNum = new System.Random();
         ing = new System.Random();
@@ -70,7 +73,6 @@ public class OrderManager : MonoBehaviour {
     }
 
     private void ViewOrders() {
-        orderText.SetText("");
         orderText.text += "\nOrder #" + (orderIndex + 1) + ": "; 
         for (int j = 0; j < orders[orderIndex].Count; j++) {
             //Iterating products

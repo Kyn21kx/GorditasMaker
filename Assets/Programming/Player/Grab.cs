@@ -25,17 +25,20 @@ public class Grab : MonoBehaviour
     
     private void GrabObject () {
         //Change Raycast to raycast all
-        RaycastHit hit;
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, grabbingDistance)) {
-            if (hit.transform != null && hit.transform.CompareTag("Pickup")) {
-                if (Input.GetMouseButtonDown(1)) {
-                    disToObj = Vector3.Distance(hit.transform.position, cam.transform.position);
-                    obj = hit.transform;
-                    rg = obj.GetComponent<Rigidbody>();
-                    rg.angularVelocity *= Vector2.zero;
-                    grabbed = true;
+        RaycastHit[] hit = Physics.RaycastAll(cam.transform.position, cam.transform.forward, grabbingDistance);
+        if (hit != null) {
+            foreach (var item in hit) {
+                if (item.transform != null && item.transform.CompareTag("Pickup")) {
+                    if (Input.GetMouseButtonDown(1)) {
+                        disToObj = Vector3.Distance(item.transform.position, cam.transform.position);
+                        obj = item.transform;
+                        rg = obj.GetComponent<Rigidbody>();
+                        rg.angularVelocity *= Vector2.zero;
+                        grabbed = true;
+                        break;
+                    }
+
                 }
-                
             }
         }
         if (grabbed) {
