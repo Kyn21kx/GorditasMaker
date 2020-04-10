@@ -16,8 +16,9 @@ public class OrderManager : MonoBehaviour {
     public List<List<Ingredients[]>> orders = new List<List<Ingredients[]>>();
     public TextMeshProUGUI orderText;
     private System.Random ing;
-    [SerializeField]
-    private int orderIndex = -1;
+    private int orderIndex = 0;
+    private Ingredients[] ingredients;
+    private List<Ingredients[]> products = new List<Ingredients[]>();
     #endregion
     /*
      * TO DO SUPER IMPORTAAAAAAAAAAANT
@@ -34,43 +35,43 @@ public class OrderManager : MonoBehaviour {
     }
 
     private IEnumerator GenerateOrder() {
-        yield return new WaitForFixedUpdate();
         numberOfProducts = new System.Random().Next(1, maxNumberOfProducts);
-        List<Ingredients[]> products = new List<Ingredients[]>();
-        for (int i = 0; i < numberOfProducts; i++) {
-            yield return new WaitForFixedUpdate();
-            orders.Add(GenerateProduct(products));
-            yield return new WaitForFixedUpdate();
-        }
-        orderIndex++;
-        ViewOrders();
-    }
-
-    private List<Ingredients[]> GenerateProduct(List<Ingredients[]> p) {
-        p.Add(GenerateGordita());
-        return p;
-    }
-
-    private Ingredients[] GenerateGordita() {
-        //Return the array of the ingredients selected
         System.Random ingNum = new System.Random();
         ing = new System.Random();
         var values = System.Enum.GetValues(typeof(Ingredients));
-        Ingredients[] ingredients;
-        ingredients = new Ingredients[ingNum.Next(1, System.Enum.GetNames(typeof(Ingredients)).Length)];
         repeatedValues.Clear();
-        for (int i = 0; i < ingredients.Length; i++) {
-            int init = ing.Next(ingredients.Length);
-            if (!repeatedValues.Contains(init)) {
-                var newIng = (Ingredients)values.GetValue(init);
-                ingredients.SetValue(newIng, i);
-                repeatedValues.Add(init);
+        yield return new WaitForFixedUpdate();
+        //For controlling order generation
+        for (int k = 0; k < numberOfProducts; k++) {
+            //For controlling product generation
+            for (int j = 0; j < numberOfProducts; j++) {
+                //For controlling ingredient generation
+                ingredients = new Ingredients[ingNum.Next(1, System.Enum.GetNames(typeof(Ingredients)).Length)];
+                for (int i = 0; i < ingredients.Length; i++) {
+                    yield return new WaitForFixedUpdate();
+                    int init = ing.Next(ingredients.Length);
+                    if (!repeatedValues.Contains(init)) {
+                        var newIng = (Ingredients)values.GetValue(init);
+                        yield return new WaitForFixedUpdate();
+                        ingredients.SetValue(newIng, i);
+                        yield return new WaitForFixedUpdate();
+                        repeatedValues.Add(init);
+                    }
+                    else {
+                        i--;
+                    }
+                }
+                //Here the ingredients are finished
+                yield return new WaitForFixedUpdate();
+                products.Add(ingredients);
+                yield return new WaitForFixedUpdate();
             }
-            else {
-                i--;
-            }
+            yield return new WaitForFixedUpdate();
+            orders.Add(products);
+            yield return new WaitForFixedUpdate();
+            ViewOrders();
+            orderIndex++;
         }
-        return ingredients;
     }
 
     private void ViewOrders() {
