@@ -28,24 +28,22 @@ public class OrderManager : MonoBehaviour {
         //Replace input event for when a customer walks in to ask for an order
         tmr += Time.deltaTime;
         if (tmr >= 5f) {
-            repeatedValues.Clear();
-            StartCoroutine(GenerateOrder());
             tmr = 0f;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            orderIndex++;
-            ViewOrders();
+            StartCoroutine(GenerateOrder());
         }
     }
 
     private IEnumerator GenerateOrder() {
+        yield return new WaitForFixedUpdate();
         numberOfProducts = new System.Random().Next(1, maxNumberOfProducts);
         List<Ingredients[]> products = new List<Ingredients[]>();
         for (int i = 0; i < numberOfProducts; i++) {
+            yield return new WaitForFixedUpdate();
             orders.Add(GenerateProduct(products));
             yield return new WaitForFixedUpdate();
         }
+        orderIndex++;
+        ViewOrders();
     }
 
     private List<Ingredients[]> GenerateProduct(List<Ingredients[]> p) {
