@@ -23,19 +23,23 @@ public class OrderManager : MonoBehaviour {
      * TO DO SUPER IMPORTAAAAAAAAAAANT
      * Replace the use of global variables for the return of every method, because the functions are returning literally all of the values on the arrays
      */
+    float tmr = 0f;
     private void Update() {
         //Replace input event for when a customer walks in to ask for an order
-        if (Input.GetKeyDown(KeyCode.E)) {
-            
+        tmr += Time.deltaTime;
+        if (tmr >= 5f) {
+            repeatedValues.Clear();
             StartCoroutine(GenerateOrder());
+            tmr = 0f;
         }
+
         if (Input.GetKeyDown(KeyCode.Space)) {
+            orderIndex++;
             ViewOrders();
         }
     }
 
     private IEnumerator GenerateOrder() {
-        orderIndex++;
         numberOfProducts = new System.Random().Next(1, maxNumberOfProducts);
         List<Ingredients[]> products = new List<Ingredients[]>();
         for (int i = 0; i < numberOfProducts; i++) {
@@ -50,7 +54,6 @@ public class OrderManager : MonoBehaviour {
     }
 
     private Ingredients[] GenerateGordita() {
-
         //Return the array of the ingredients selected
         System.Random ingNum = new System.Random();
         ing = new System.Random();
