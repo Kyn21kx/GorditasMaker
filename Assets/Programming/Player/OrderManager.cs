@@ -17,71 +17,73 @@ public class OrderManager : MonoBehaviour {
     public TextMeshProUGUI orderText;
     private System.Random ing;
     private int orderIndex = 0;
-    private Ingredients[] ingredients;
     private List<Ingredients[]> products = new List<Ingredients[]>();
+    public bool generating;
+    private Ingredients[] ingredients;
     #endregion
     /*
      * TO DO SUPER IMPORTAAAAAAAAAAANT
      * Replace the use of global variables for the return of every method, because the functions are returning literally all of the values on the arrays
      */
     float tmr = 0f;
+
+    private void Start() {
+        generating = false;
+    }
+
     private void Update() {
         //Replace input event for when a customer walks in to ask for an order
-        tmr += Time.deltaTime;
-        if (tmr >= 5f) {
-            tmr = 0f;
-            StartCoroutine(GenerateOrder());
+        if (!generating) {
+            tmr += Time.deltaTime;
+            if (tmr >= 5f) {
+                tmr = 0f;
+                StartCoroutine(Ingredient_Generation());
+            }
         }
     }
 
-    private IEnumerator GenerateOrder() {
-        numberOfProducts = new System.Random().Next(1, maxNumberOfProducts);
-        System.Random ingNum = new System.Random();
-        ing = new System.Random();
-        var values = System.Enum.GetValues(typeof(Ingredients));
-        repeatedValues.Clear();
-        yield return new WaitForFixedUpdate();
-        //For controlling order generation
-        for (int k = 0; k < numberOfProducts; k++) {
-            //For controlling product generation
-            for (int j = 0; j < numberOfProducts; j++) {
-                //For controlling ingredient generation
-                ingredients = new Ingredients[ingNum.Next(1, System.Enum.GetNames(typeof(Ingredients)).Length)];
-                for (int i = 0; i < ingredients.Length; i++) {
-                    yield return new WaitForFixedUpdate();
-                    int init = ing.Next(ingredients.Length);
-                    if (!repeatedValues.Contains(init)) {
-                        var newIng = (Ingredients)values.GetValue(init);
-                        yield return new WaitForFixedUpdate();
-                        ingredients.SetValue(newIng, i);
-                        yield return new WaitForFixedUpdate();
-                        repeatedValues.Add(init);
-                    }
-                    else {
-                        i--;
-                    }
+
+
+    private IEnumerator Ingredient_Generation() {
+        generating = true;
+        int n_Products = new System.Random().Next(1, maxNumberOfProducts);
+        for (int j = 0; j < n_Products; j++) {
+            System.Random ingNum = new System.Random();
+            ing = new System.Random();
+            var values = System.Enum.GetValues(typeof(Ingredients));
+            repeatedValues.Clear();
+            ingredients = new Ingredients[ingNum.Next(1, System.Enum.GetNames(typeof(Ingredients)).Length)];
+            for (int i = 0; i < ingredients.Length; i++) {
+                yield return new WaitForSecondsRealtime(0.2f);
+                int init = ing.Next(ingredients.Length);
+                yield return new WaitForSecondsRealtime(0.2f);
+                if (!repeatedValues.Contains(init)) {
+                    var newIng = (Ingredients)values.GetValue(init);
+                    yield return new WaitForSecondsRealtime(0.2f);
+                    ingredients.SetValue(newIng, i);
+                    yield return new WaitForSecondsRealtime(0.2f);
+                    repeatedValues.Add(init);
                 }
-                //Here the ingredients are finished
-                yield return new WaitForFixedUpdate();
-                products.Add(ingredients);
-                yield return new WaitForFixedUpdate();
+                else {
+                    i--;
+                }
             }
-            yield return new WaitForFixedUpdate();
-            orders.Add(products);
-            yield return new WaitForFixedUpdate();
-            ViewOrders();
-            orderIndex++;
+            products.Add(ingredients);
+            yield return new WaitForSecondsRealtime(0.2f);
         }
+        orders.Add(products);
+        ViewOrders();
+        generating = false;
     }
 
     private void ViewOrders() {
-        orderText.text += "\nOrder #" + (orderIndex + 1) + ": "; 
-        for (int j = 0; j < orders[orderIndex].Count; j++) {
-            //Iterating products
-            orderText.text += "Product #" + (j + 1) + ": ";
-            for (int k = 0; k < orders[orderIndex][j].Length; k++) {
-                //Iterating ingredients
-                orderText.text += orders[orderIndex][j][k] + " ";
+        for (int i = 0; i < length; i++) {
+
+        }
+        foreach (var item in products) {
+            orderText.text += "\nProducto: ";
+            foreach (var ingr in item) {
+                orderText.text += ingr + ", ";
             }
         }
         //products.Clear();
