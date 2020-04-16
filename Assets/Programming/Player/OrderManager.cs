@@ -77,7 +77,7 @@ public class OrderManager : MonoBehaviour {
     }
 
     private void ViewOrders() {
-        for (int i = 0; i < length; i++) {
+        for (int i = 0; i < orders.Count; i++) {
 
         }
         foreach (var item in products) {
