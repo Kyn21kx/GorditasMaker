@@ -44,7 +44,7 @@ public class Grab : MonoBehaviour
         if (grabbed) {
             rg.useGravity = false;
             rg.isKinematic = false;
-            rg.angularVelocity = Vector3.Cross(rg.angularVelocity, Vector3.zero);
+            //rg.angularVelocity = Vector3.Cross(rg.angularVelocity, Vector3.zero);
             //Idea del orbe gravitatorio que tiene como child al objeto
             rg.MovePosition(Vector3.Lerp(obj.position, cam.transform.position + cam.transform.forward * disToObj, Time.deltaTime * movingSpeed));
             disToObj = Mathf.Clamp(disToObj, 1f, grabbingDistance);
@@ -55,9 +55,9 @@ public class Grab : MonoBehaviour
                 disToObj -= 0.5f;
             }
             if (Input.GetMouseButtonUp(1)) {
+                rg.velocity += 3f * new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
                 grabbed = false;
                 rg.useGravity = true;
-                rg.velocity += 5f * new Vector3(cam.GetComponent<CameraMovement>().camInput.x, cam.GetComponent<CameraMovement>().camInput.y, rg.velocity.z);
             }
             Vector2 inputRot = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             if (inputRot.x != 0f) {

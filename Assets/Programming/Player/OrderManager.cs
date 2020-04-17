@@ -43,6 +43,7 @@ public class OrderManager : MonoBehaviour {
             }
         }
         if (Input.GetKeyDown(KeyCode.F)) {
+            ViewOrders();
             Camera.main.GetComponent<CameraMovement>().enabled = false;
             Cursor.lockState = CursorLockMode.None;
             orderPanel.SetActive(true);
@@ -58,13 +59,14 @@ public class OrderManager : MonoBehaviour {
 
     private IEnumerator Ingredient_Generation() {
         generating = true;
-        int n_Products = new System.Random().Next(1, maxNumberOfProducts);
-        for (int j = 0; j < n_Products; j++) {
+        numberOfProducts = new System.Random().Next(1, maxNumberOfProducts);
+        for (int j = 0; j < numberOfProducts; j++) {
             System.Random ingNum = new System.Random();
             ing = new System.Random();
             var values = System.Enum.GetValues(typeof(Ingredients));
             repeatedValues.Clear();
-            ingredients = new Ingredients[ingNum.Next(1, System.Enum.GetNames(typeof(Ingredients)).Length)];
+            numberOfIngredientes = ingNum.Next(1, System.Enum.GetNames(typeof(Ingredients)).Length);
+            ingredients = new Ingredients[numberOfIngredientes];
             for (int i = 0; i < ingredients.Length; i++) {
                 yield return new WaitForSecondsRealtime(0.2f);
                 int init = ing.Next(ingredients.Length);
@@ -84,21 +86,25 @@ public class OrderManager : MonoBehaviour {
             yield return new WaitForSecondsRealtime(0.2f);
         }
         orders.Add(products);
-        ViewOrders();
         generating = false;
     }
 
     private void ViewOrders() {
         string orderCompilation = null;
         orderText.SetText("");
-        for (int i = 0; i < orders.Count; i++) {
-            orderCompilation += "Orden #" + (i + 1) + ":\n";
-            foreach (var prod in orders[i]) {
-                orderCompilation += "Producto: \n";
-                foreach (var ingr in prod) {
-                    orderCompilation += ingr + ".\n";
+        try {
+            for (int i = 0; i < orders.Count; i++) {
+                orderCompilation += "Orden #" + (i + 1) + ":\n";
+                foreach (var prod in orders[i]) {
+                    orderCompilation += "Producto: \n";
+                    foreach (var ingr in prod) {
+                        orderCompilation += ingr + ".\n";
+                    }
                 }
             }
+        }
+        catch (System.Exception err) {
+            Debug.Log(err);
         }
         orderText.SetText(orderCompilation);
         //products.Clear();
