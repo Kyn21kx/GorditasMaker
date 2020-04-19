@@ -39,6 +39,7 @@ public class OrderManager : MonoBehaviour {
             tmr += Time.deltaTime;
             if (tmr >= generationTime) {
                 tmr = 0f;
+                products.Clear();
                 StartCoroutine(Ingredient_Generation());
             }
         }
