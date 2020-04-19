@@ -103,11 +103,11 @@ public class OrderManager : MonoBehaviour {
                     }
                 }
             }
+            orderText.SetText(orderCompilation);
         }
         catch (System.Exception err) {
             Debug.Log(err);
         }
-        orderText.SetText(orderCompilation);
         //products.Clear();
     }
 
