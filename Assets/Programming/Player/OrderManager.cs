@@ -39,6 +39,7 @@ public class OrderManager : MonoBehaviour {
             tmr += Time.deltaTime;
             if (tmr >= generationTime) {
                 tmr = 0f;
+                products.Clear();
                 StartCoroutine(Ingredient_Generation());
             }
         }
@@ -68,22 +69,22 @@ public class OrderManager : MonoBehaviour {
             numberOfIngredientes = ingNum.Next(1, System.Enum.GetNames(typeof(Ingredients)).Length);
             ingredients = new Ingredients[numberOfIngredientes];
             for (int i = 0; i < ingredients.Length; i++) {
-                yield return new WaitForSecondsRealtime(0.2f);
+                yield return new WaitForSecondsRealtime(0.1f);
                 int init = ing.Next(ingredients.Length);
-                yield return new WaitForSecondsRealtime(0.2f);
+                yield return new WaitForSecondsRealtime(0.1f);
                 if (!repeatedValues.Contains(init)) {
                     var newIng = (Ingredients)values.GetValue(init);
-                    yield return new WaitForSecondsRealtime(0.2f);
+                    yield return new WaitForSecondsRealtime(0.1f);
                     ingredients.SetValue(newIng, i);
-                    yield return new WaitForSecondsRealtime(0.2f);
+                    yield return new WaitForSecondsRealtime(0.1f);
                     repeatedValues.Add(init);
                 }
                 else {
                     i--;
                 }
             }
+            yield return new WaitForSecondsRealtime(0.1f);
             products.Add(ingredients);
-            yield return new WaitForSecondsRealtime(0.2f);
         }
         orders.Add(products);
         generating = false;
