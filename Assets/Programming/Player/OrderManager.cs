@@ -2,10 +2,10 @@
 using TMPro;
 using System.Collections.Generic;
 using System.Collections;
+using Assets.Programming.Player;
 
 public class OrderManager : MonoBehaviour {
     //Set up orders by a minimum number of ingredients, core ingredients, and types of food
-    public enum Ingredients { Frijoles, Chicharron, Queso, Papas, Crema, Guacamole, Salsa };
     //public enum FoodType {Gordita, Taco};
     #region Variables
     public float generationTime;
@@ -14,14 +14,12 @@ public class OrderManager : MonoBehaviour {
     public int maxNumberOfProducts;
     [SerializeField]
     List<int> repeatedValues = new List<int>();
-    public List<List<Ingredients[]>> orders = new List<List<Ingredients[]>>();
     public TextMeshProUGUI orderText;
     public GameObject orderPanel;
     private System.Random ing;
     private int orderIndex = 0;
-    private List<Ingredients[]> products = new List<Ingredients[]>();
     public bool generating;
-    private Ingredients[] ingredients;
+    Product product;
     #endregion
     /*
      * TO DO SUPER IMPORTAAAAAAAAAAANT
@@ -39,12 +37,10 @@ public class OrderManager : MonoBehaviour {
             tmr += Time.deltaTime;
             if (tmr >= generationTime) {
                 tmr = 0f;
-                products.Clear();
-                StartCoroutine(Ingredient_Generation());
             }
         }
         if (Input.GetKeyDown(KeyCode.F)) {
-            ViewOrders();
+            product = new Product();
             Camera.main.GetComponent<CameraMovement>().enabled = false;
             Cursor.lockState = CursorLockMode.None;
             orderPanel.SetActive(true);
@@ -55,60 +51,4 @@ public class OrderManager : MonoBehaviour {
             orderPanel.SetActive(false);
         }
     }
-
-
-
-    private IEnumerator Ingredient_Generation() {
-        generating = true;
-        numberOfProducts = new System.Random().Next(1, maxNumberOfProducts);
-        for (int j = 0; j < numberOfProducts; j++) {
-            System.Random ingNum = new System.Random();
-            ing = new System.Random();
-            var values = System.Enum.GetValues(typeof(Ingredients));
-            repeatedValues.Clear();
-            numberOfIngredientes = ingNum.Next(1, System.Enum.GetNames(typeof(Ingredients)).Length);
-            ingredients = new Ingredients[numberOfIngredientes];
-            for (int i = 0; i < ingredients.Length; i++) {
-                yield return new WaitForSecondsRealtime(0.1f);
-                int init = ing.Next(ingredients.Length);
-                yield return new WaitForSecondsRealtime(0.1f);
-                if (!repeatedValues.Contains(init)) {
-                    var newIng = (Ingredients)values.GetValue(init);
-                    yield return new WaitForSecondsRealtime(0.1f);
-                    ingredients.SetValue(newIng, i);
-                    yield return new WaitForSecondsRealtime(0.1f);
-                    repeatedValues.Add(init);
-                }
-                else {
-                    i--;
-                }
-            }
-            yield return new WaitForSecondsRealtime(0.1f);
-            products.Add(ingredients);
-        }
-        orders.Add(products);
-        generating = false;
-    }
-
-    private void ViewOrders() {
-        string orderCompilation = null;
-        orderText.SetText("");
-        try {
-            for (int i = 0; i < orders.Count; i++) {
-                orderCompilation += "Orden #" + (i + 1) + ":\n";
-                foreach (var prod in orders[i]) {
-                    orderCompilation += "Producto: \n";
-                    foreach (var ingr in prod) {
-                        orderCompilation += ingr + ".\n";
-                    }
-                }
-            }
-            orderText.SetText(orderCompilation);
-        }
-        catch (System.Exception err) {
-            Debug.Log(err);
-        }
-        //products.Clear();
-    }
-
 }
