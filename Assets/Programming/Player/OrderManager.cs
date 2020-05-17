@@ -19,7 +19,7 @@ public class OrderManager : MonoBehaviour {
     private System.Random ing;
     private int orderIndex = 0;
     public bool generating;
-    Product product;
+    Order order;
     #endregion
     /*
      * TO DO SUPER IMPORTAAAAAAAAAAANT
@@ -40,7 +40,8 @@ public class OrderManager : MonoBehaviour {
             }
         }
         if (Input.GetKeyDown(KeyCode.F)) {
-            product = new Product();
+            order = new Order(2);
+            Debug.Log(order);
             Camera.main.GetComponent<CameraMovement>().enabled = false;
             Cursor.lockState = CursorLockMode.None;
             orderPanel.SetActive(true);

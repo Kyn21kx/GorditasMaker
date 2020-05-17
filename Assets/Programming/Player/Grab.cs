@@ -47,7 +47,7 @@ public class Grab : MonoBehaviour
             //rg.angularVelocity = Vector3.Cross(rg.angularVelocity, Vector3.zero);
             //Idea del orbe gravitatorio que tiene como child al objeto
             rg.MovePosition(Vector3.Lerp(obj.position, cam.transform.position + cam.transform.forward * disToObj, Time.deltaTime * movingSpeed));
-            disToObj = Mathf.Clamp(disToObj, 1f, grabbingDistance);
+            disToObj = Mathf.Clamp(disToObj, 0.5f, grabbingDistance);
             if (Input.mouseScrollDelta.y > 0) {
                 disToObj+= 0.5f;
             }
