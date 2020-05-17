@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using UnityEngine;
 
 namespace Assets.Programming.Player {
@@ -15,13 +15,12 @@ namespace Assets.Programming.Player {
             products = new List<Product>();
             NumberOfProducts = new System.Random().Next(1, maxNumberOfProducts);
             for (int i = 0; i < NumberOfProducts; i++) {
-                Task.Run(async () => {
-                    products.Add(await CreateProduct());
-                });
+                products.Add(CreateProduct());
             }
         }
 
-        public async Task<Product> CreateProduct () {
+        public Product CreateProduct () {
+            Thread.Sleep(1000);
             return new Product();
         }
 

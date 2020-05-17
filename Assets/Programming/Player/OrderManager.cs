@@ -40,7 +40,7 @@ public class OrderManager : MonoBehaviour {
             }
         }
         if (Input.GetKeyDown(KeyCode.F)) {
-            order = new Order(2);
+            order = new Order(5);
             Debug.Log(order);
             Camera.main.GetComponent<CameraMovement>().enabled = false;
             Cursor.lockState = CursorLockMode.None;
