@@ -21,8 +21,42 @@ public class Grab : MonoBehaviour
 
     private void Update() {
         GrabObject();
+        MoveObject();
     }
-    
+
+
+    private void MoveObject () {
+        if (grabbed) {
+            rg.useGravity = false;
+            rg.isKinematic = false;
+            //Get mouse position to the screen
+            Vector3 grabPos = cam.transform.position + cam.transform.forward * disToObj - rg.position;
+            rg.velocity = grabPos * Time.deltaTime * movingSpeed;
+
+            disToObj = Mathf.Clamp(disToObj, 0.5f, grabbingDistance);
+            if (Input.mouseScrollDelta.y > 0) {
+                disToObj += 0.5f;
+            }
+            else if (Input.mouseScrollDelta.y < 0) {
+                disToObj -= 0.5f;
+            }
+            if (Input.GetMouseButtonUp(1)) {
+                rg.velocity += 3f * new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+                grabbed = false;
+                rg.useGravity = true;
+            }
+            Vector2 inputRot = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            if (inputRot.x != 0f) {
+                rg.angularVelocity = Vector3.zero;
+                obj.Rotate(inputRot.x * Time.deltaTime * 300f, 0f, 0f);
+            }
+            if (inputRot.y != 0f) {
+                rg.angularVelocity = Vector3.zero;
+                obj.Rotate(0f, -inputRot.y * Time.deltaTime * 300f, 0f);
+            }
+        }
+    }
+
     private void GrabObject () {
         //Change Raycast to raycast all
         RaycastHit[] hit = Physics.RaycastAll(cam.transform.position, cam.transform.forward, grabbingDistance);
@@ -41,40 +75,6 @@ public class Grab : MonoBehaviour
                 }
             }
         }
-        if (grabbed) {
-            rg.useGravity = false;
-            rg.isKinematic = false;
-            //rg.angularVelocity = Vector3.Cross(rg.angularVelocity, Vector3.zero);
-            //Idea del orbe gravitatorio que tiene como child al objeto
-            rg.MovePosition(Vector3.Lerp(obj.position, cam.transform.position + cam.transform.forward * disToObj, Time.deltaTime * movingSpeed));
-            disToObj = Mathf.Clamp(disToObj, 0.5f, grabbingDistance);
-            if (Input.mouseScrollDelta.y > 0) {
-                disToObj+= 0.5f;
-            }
-            else if (Input.mouseScrollDelta.y < 0) {
-                disToObj -= 0.5f;
-            }
-            if (Input.GetMouseButtonUp(1)) {
-                rg.velocity += 3f * new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-                grabbed = false;
-                rg.useGravity = true;
-            }
-            Vector2 inputRot = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            if (inputRot.x != 0f) {
-                obj.Rotate(inputRot.x * Time.deltaTime * 300f, 0f, 0f);
-            }
-            if (inputRot.y != 0f) {
-                obj.Rotate(0f, -inputRot.y * Time.deltaTime * 300f, 0f);
-            }
-        }
         Debug.DrawRay(cam.transform.position, cam.transform.forward * grabbingDistance);
     }
-
-    private void OnCollisionStay(Collision collision) {
-        if (grabbed) {
-
-         
-        }
-    }
-
 }
