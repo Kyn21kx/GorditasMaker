@@ -30,8 +30,8 @@ public class Grab : MonoBehaviour
             rg.useGravity = false;
             rg.isKinematic = false;
             //Get mouse position to the screen
-            Vector3 grabPos = cam.transform.position + cam.transform.forward * disToObj - rg.position;
-            rg.velocity = grabPos * Time.deltaTime * movingSpeed;
+            Vector3 grabPos = Vector3.Lerp(rg.velocity, movingSpeed * (cam.transform.position + cam.transform.forward * disToObj - rg.position), Time.deltaTime * 8f);
+            rg.velocity = grabPos;
 
             disToObj = Mathf.Clamp(disToObj, 0.5f, grabbingDistance);
             if (Input.mouseScrollDelta.y > 0) {
