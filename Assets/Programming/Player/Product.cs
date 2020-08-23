@@ -1,24 +1,20 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
 
 namespace Assets.Programming.Player {
     public class Product {
-        public enum Ingredients { Frijoles, Chicharron, Queso, Papas, Crema, Guacamole, Salsa };
+        public enum Ingredients { 
+            Frijoles, Chicharron, Queso,
+            Papas, Crema, Guacamole, Salsa
+        };
         public Ingredients[] ingredients;
         private List<int> repeatedValues;
         public bool finishedProduct;
         public Product () {
             finishedProduct = false;
-            Task.Run(async () => {
-                await RandomGeneration();
-            }).GetAwaiter();
+            RandomGeneration();
         }
-        private async Task RandomGeneration() {
+        private void RandomGeneration() {
             repeatedValues = new List<int>();
             var values = Enum.GetValues(typeof(Ingredients));
             int numberOfIngredients = new System.Random().Next(1, Enum.GetNames(typeof(Ingredients)).Length);

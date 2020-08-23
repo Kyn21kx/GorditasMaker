@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets.Programming;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,19 +21,18 @@ public class Grab : MonoBehaviour
     }
 
     private void Update() {
+        _Input();
         GrabObject();
+    }
+
+    private void FixedUpdate() {
         MoveObject();
     }
 
-
-    private void MoveObject () {
+    private void _Input () {
         if (grabbed) {
-            rg.useGravity = false;
-            rg.isKinematic = false;
-            //Get mouse position to the screen
-            Vector3 grabPos = Vector3.Lerp(rg.velocity, movingSpeed * (cam.transform.position + cam.transform.forward * disToObj - rg.position), Time.deltaTime * 8f);
-            rg.velocity = grabPos;
-
+            Vector2 inputRot = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            //Change rotation to be managed with 
             disToObj = Mathf.Clamp(disToObj, 0.5f, grabbingDistance);
             if (Input.mouseScrollDelta.y > 0) {
                 disToObj += 0.5f;
@@ -41,24 +41,27 @@ public class Grab : MonoBehaviour
                 disToObj -= 0.5f;
             }
             if (Input.GetMouseButtonUp(1)) {
-                rg.velocity += 3f * new Vector3(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
                 grabbed = false;
                 rg.useGravity = true;
             }
-            Vector2 inputRot = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-            if (inputRot.x != 0f) {
+            if (inputRot != Vector2.zero) {
                 rg.angularVelocity = Vector3.zero;
-                obj.Rotate(inputRot.x * Time.deltaTime * 300f, 0f, 0f);
+                obj.Rotate(inputRot.x * Time.deltaTime * 300f, inputRot.y * Time.deltaTime * 300f, 0f);
             }
-            if (inputRot.y != 0f) {
-                rg.angularVelocity = Vector3.zero;
-                obj.Rotate(0f, -inputRot.y * Time.deltaTime * 300f, 0f);
-            }
+        }
+        
+    }
+
+    private void MoveObject () {
+        if (grabbed) {
+            rg.useGravity = false;
+            rg.isKinematic = false;
+            PhysicsOperations.LerpVelocity(ref rg, (cam.transform.position + cam.transform.forward * disToObj - rg.position), movingSpeed);
         }
     }
 
     private void GrabObject () {
-        //Change Raycast to raycast all
+        //Setup layermask to make sure that you cannot grab between collisions
         RaycastHit[] hit = Physics.RaycastAll(cam.transform.position, cam.transform.forward, grabbingDistance);
         if (hit != null) {
             foreach (var item in hit) {

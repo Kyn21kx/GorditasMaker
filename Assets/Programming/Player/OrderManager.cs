@@ -9,26 +9,23 @@ public class OrderManager : MonoBehaviour {
     //public enum FoodType {Gordita, Taco};
     #region Variables
     public float generationTime;
-    public int numberOfIngredientes;
-    private int numberOfProducts;
     public int maxNumberOfProducts;
-    [SerializeField]
-    List<int> repeatedValues = new List<int>();
     public TextMeshProUGUI orderText;
     public GameObject orderPanel;
-    private System.Random ing;
-    private int orderIndex = 0;
     public bool generating;
-    Order order;
+    List<Order> orders;
     #endregion
     /*
      * TO DO SUPER IMPORTAAAAAAAAAAANT
      * Replace the use of global variables for the return of every method, because the functions are returning literally all of the values on the arrays
      */
+    [SerializeField]
     float tmr = 0f;
 
     private void Start() {
+        orders = new List<Order>();
         generating = false;
+        tmr += generationTime / 1.5f;
     }
 
     private void Update() {
@@ -36,14 +33,14 @@ public class OrderManager : MonoBehaviour {
         if (!generating) {
             tmr += Time.deltaTime;
             if (tmr >= generationTime) {
+                orders.Add(new Order());
                 tmr = 0f;
             }
         }
         if (Input.GetKeyDown(KeyCode.F)) {
-            order = new Order(5);
-            Debug.Log(order);
             Camera.main.GetComponent<CameraMovement>().enabled = false;
             Cursor.lockState = CursorLockMode.None;
+            DisplayOrders();
             orderPanel.SetActive(true);
         }
         else if (Input.GetKeyUp(KeyCode.F)) {
@@ -52,4 +49,13 @@ public class OrderManager : MonoBehaviour {
             orderPanel.SetActive(false);
         }
     }
+
+    private void DisplayOrders () {
+        string concat = "";
+        for (int i = 0; i < orders.Count; i++) {
+            concat += "Orden #" + (i + 1) + ":\n" + orders[i].ToString() + "\n";
+        }
+        orderText.text = concat;
+    }
+
 }
