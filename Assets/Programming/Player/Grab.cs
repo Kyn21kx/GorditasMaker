@@ -1,6 +1,7 @@
 ﻿using Assets.Programming;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Grab : MonoBehaviour
@@ -13,9 +14,14 @@ public class Grab : MonoBehaviour
     Transform obj;
     float disToObj = 0f;
     Rigidbody rg = null;
+    TextMeshProUGUI interactionText;
+    [SerializeField]
+    LayerMask targetMask;
     #endregion
 
     private void Start() {
+        interactionText = GameObject.Find("GameManager").GetComponent<GameManager>().canvasUI.transform.Find("InteractionText").GetComponent<TextMeshProUGUI>();
+        interactionText.gameObject.SetActive(false);
         grabbed = false;
         cam = Camera.main;
     }
@@ -62,22 +68,20 @@ public class Grab : MonoBehaviour
 
     private void GrabObject () {
         //Setup layermask to make sure that you cannot grab between collisions
-        RaycastHit[] hit = Physics.RaycastAll(cam.transform.position, cam.transform.forward, grabbingDistance);
-        if (hit != null) {
-            foreach (var item in hit) {
-                if (item.transform != null && item.transform.CompareTag("Pickup")) {
-                    if (Input.GetMouseButtonDown(1)) {
-                        disToObj = Vector3.Distance(item.transform.position, cam.transform.position);
-                        obj = item.transform;
-                        rg = obj.GetComponent<Rigidbody>();
-                        rg.angularVelocity *= Vector2.zero;
-                        grabbed = true;
-                        break;
-                    }
-
-                }
+        RaycastHit item;
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out item, grabbingDistance, targetMask)) {
+            interactionText.gameObject.SetActive(true);
+            interactionText.SetText("[E]");
+            if (Input.GetMouseButtonDown(1)) {
+                disToObj = Vector3.Distance(item.transform.position, cam.transform.position);
+                obj = item.transform;
+                rg = obj.GetComponent<Rigidbody>();
+                rg.angularVelocity *= Vector2.zero;
+                grabbed = true;
             }
         }
+        else if (!grabbed)
+            interactionText.gameObject.SetActive(false);
         Debug.DrawRay(cam.transform.position, cam.transform.forward * grabbingDistance);
     }
 }
