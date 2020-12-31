@@ -4,17 +4,19 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class Grab : MonoBehaviour
-{
+public class Grab : MonoBehaviour {
     #region Variables
     Camera cam;
     public float grabbingDistance;
     public float movingSpeed;
-    public bool grabbed;
-    Transform obj;
-    float disToObj = 0f;
-    Rigidbody rg = null;
-    TextMeshProUGUI interactionText;
+    public bool Grabbed { get; private set; }
+    [SerializeField]
+    private bool rotating;
+    private Transform obj;
+    private float disToObj = 0f;
+    private Rigidbody rg = null;
+    private TextMeshProUGUI interactionText;
+    private Movement movRef;
     [SerializeField]
     LayerMask targetMask;
     #endregion
@@ -22,7 +24,9 @@ public class Grab : MonoBehaviour
     private void Start() {
         interactionText = GameObject.Find("GameManager").GetComponent<GameManager>().canvasUI.transform.Find("InteractionText").GetComponent<TextMeshProUGUI>();
         interactionText.gameObject.SetActive(false);
-        grabbed = false;
+        Grabbed = false;
+        rotating = false;
+        movRef = GetComponent<Movement>();
         cam = Camera.main;
     }
 
@@ -36,9 +40,9 @@ public class Grab : MonoBehaviour
     }
 
     private void _Input () {
-        if (grabbed) {
+        if (Grabbed) {
             //Change rotation to be managed with 
-            disToObj = Mathf.Clamp(disToObj, 0.5f, grabbingDistance);
+            disToObj = Mathf.Clamp(disToObj, 0.5f, grabbingDistance / 2.5f);
             if (Input.mouseScrollDelta.y > 0) {
                 disToObj += 0.5f;
             }
@@ -46,19 +50,30 @@ public class Grab : MonoBehaviour
                 disToObj -= 0.5f;
             }
             if (Input.GetMouseButtonUp(1)) {
-                grabbed = false;
+                Grabbed = false;
                 rg.useGravity = true;
             }
-            if (InputManager.RotationInput != Vector2.zero) {
+
+            if (!rotating && Input.GetKeyDown(KeyCode.R)) {
+                rotating = true;
+                movRef.canMove = false;
+            }
+            else if (rotating && Input.GetKeyDown(KeyCode.R)) {
+                rotating = false;
+                movRef.canMove = true;
+            
+            }
+
+            if (InputManager.MovementInput != Vector2.zero && rotating) {
                 rg.angularVelocity = Vector3.zero;
-                obj.Rotate(InputManager.RotationInput.x * Time.deltaTime * 300f, InputManager.RotationInput.y * Time.deltaTime * 300f, 0f);
+                obj.Rotate(InputManager.MovementInput.x * Time.deltaTime * 300f, InputManager.MovementInput.y * Time.deltaTime * 300f, 0f);
             }
         }
         
     }
 
     private void MoveObject () {
-        if (grabbed) {
+        if (Grabbed) {
             rg.useGravity = false;
             rg.isKinematic = false;
             PhysicsOperations.LerpVelocity(ref rg, (cam.transform.position + cam.transform.forward * disToObj - rg.position), movingSpeed);
@@ -76,10 +91,10 @@ public class Grab : MonoBehaviour
                 obj = item.transform;
                 rg = obj.GetComponent<Rigidbody>();
                 rg.angularVelocity *= Vector2.zero;
-                grabbed = true;
+                Grabbed = true;
             }
         }
-        else if (!grabbed)
+        else if (!Grabbed)
             interactionText.gameObject.SetActive(false);
         Debug.DrawRay(cam.transform.position, cam.transform.forward * grabbingDistance);
     }

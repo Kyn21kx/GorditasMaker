@@ -9,14 +9,17 @@ public class Movement : MonoBehaviour {
     [SerializeField]
     private float speed = 1f;
     private Rigidbody rig;
+    public bool canMove;
     #endregion
 
     private void Start() {
         rig = GetComponent<Rigidbody>();
+        canMove = true;
     }
 
-    private void FixedUpdate() {
-        Move();
+    private void Update() {
+        if (canMove)
+            Move();
     }
 
     private void Move() {

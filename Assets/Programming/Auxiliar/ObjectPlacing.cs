@@ -22,7 +22,7 @@ public class ObjectPlacing : MonoBehaviour
     }
 
     private void Update() {
-        if (!grabRef.grabbed) {
+        if (!grabRef.Grabbed) {
             RadiusBehaviour();
         }
     }
