@@ -37,7 +37,6 @@ public class Grab : MonoBehaviour
 
     private void _Input () {
         if (grabbed) {
-            Vector2 inputRot = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
             //Change rotation to be managed with 
             disToObj = Mathf.Clamp(disToObj, 0.5f, grabbingDistance);
             if (Input.mouseScrollDelta.y > 0) {
@@ -50,9 +49,9 @@ public class Grab : MonoBehaviour
                 grabbed = false;
                 rg.useGravity = true;
             }
-            if (inputRot != Vector2.zero) {
+            if (InputManager.RotationInput != Vector2.zero) {
                 rg.angularVelocity = Vector3.zero;
-                obj.Rotate(inputRot.x * Time.deltaTime * 300f, inputRot.y * Time.deltaTime * 300f, 0f);
+                obj.Rotate(InputManager.RotationInput.x * Time.deltaTime * 300f, InputManager.RotationInput.y * Time.deltaTime * 300f, 0f);
             }
         }
         
