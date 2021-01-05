@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 2035111234}
-  m_IndirectSpecularColor: {r: 131.16867, g: 162.54297, b: 215.1647, a: 1}
+  m_IndirectSpecularColor: {r: 131.16855, g: 162.52502, b: 215.10977, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -17923,7 +17923,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grabbingDistance: 4
   movingSpeed: 5
-  grabbed: 0
+  rotating: 0
   targetMask:
     serializedVersion: 2
     m_Bits: 1536
@@ -18017,6 +18017,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
+  canMove: 0
 --- !u!54 &1310027953
 Rigidbody:
   m_ObjectHideFlags: 0
