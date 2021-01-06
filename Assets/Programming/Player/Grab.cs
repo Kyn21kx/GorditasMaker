@@ -69,8 +69,10 @@ public class Grab : MonoBehaviour {
                 obj.Rotate(InputManager.MovementInput.x * Time.deltaTime * 300f, InputManager.MovementInput.y * Time.deltaTime * 300f, 0f);
             }
         }
-        else
+        else {
+            rotating = false;
             movRef.canMove = true;
+        }
         
     }
 
