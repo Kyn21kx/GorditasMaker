@@ -22,9 +22,12 @@ public class Movement : MonoBehaviour {
 
 
     private void Update() {
+        _Input();
+    }
+
+    private void FixedUpdate() {
         if (canMove)
             Move();
-        _Input();
     }
 
     private void _Input() {
@@ -37,7 +40,7 @@ public class Movement : MonoBehaviour {
 
     private void Move() {
         Vector3 dir = transform.forward * InputManager.MovementInput.y + transform.right * InputManager.MovementInput.x;
-        rig.MovePosition(transform.position + dir * speed * Time.deltaTime);
+        rig.MovePosition(transform.position + dir * speed * Time.fixedDeltaTime);
     }
 
     private void Crouch() {
